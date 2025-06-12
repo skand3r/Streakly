@@ -1,52 +1,79 @@
 package com.example.streakly.ui
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun AddGoalScreen(onSave: (String, Int) -> Unit) {
     var title by remember { mutableStateOf("") }
-    var target by remember { mutableStateOf("") }
+    var target by remember { mutableStateOf(10) }
 
-    Column(modifier = Modifier
-        .padding(16.dp)
-        .fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp)
+    ) {
+        Text(
+            text = "Neues Ziel",
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.primary
+        )
 
-        Text("Ziel hinzufügen", style = MaterialTheme.typography.titleLarge)
+        Spacer(modifier = Modifier.height(24.dp))
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        TextField(
+        OutlinedTextField(
             value = title,
             onValueChange = { title = it },
-            label = { Text("Titel") },
-            modifier = Modifier.fillMaxWidth()
+            label = { Text("Titel (z. B. Liegestütze)") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            shape = RoundedCornerShape(12.dp)
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
-        TextField(
+        Text(
+            text = "Zielwert",
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        NumberPicker(
             value = target,
             onValueChange = { target = it },
-            label = { Text("Zielwert") },
-            modifier = Modifier.fillMaxWidth()
+            range = 1..1000
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
         Button(
             onClick = {
-                val targetInt = target.toIntOrNull() ?: 0
-                if (title.isNotBlank() && targetInt > 0) {
-                    onSave(title, targetInt)
+                if (title.isNotBlank()) {
+                    onSave(title.trim(), target)
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp)
         ) {
-            Text("Speichern")
+            Text("Ziel speichern")
         }
     }
 }

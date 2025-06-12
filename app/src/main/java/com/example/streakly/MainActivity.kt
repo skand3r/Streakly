@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.streakly.ui.GoalListScreen
@@ -24,10 +26,17 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val goalViewModel: GoalViewModel = viewModel()
-                    GoalListScreen(goalsFlow = goalViewModel.goals) {
-                        startActivity(Intent(this, AddGoalActivity::class.java))
-                    }
+                    val viewModel: GoalViewModel = viewModel()
+                    val goals by viewModel.goals.collectAsState()
+
+                    GoalListScreen(
+                        goals = goals,
+                        onIncrement = { viewModel.incrementGoal(it) },
+                        onDelete = { viewModel.deleteGoal(it) },
+                        onAddGoalClick = {
+                            startActivity(Intent(this, AddGoalActivity::class.java))
+                        }
+                    )
                 }
             }
         }

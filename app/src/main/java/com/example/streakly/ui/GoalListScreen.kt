@@ -1,20 +1,27 @@
 package com.example.streakly.ui
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.streakly.data.Goal
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun GoalListScreen(goalsFlow: Flow<List<Goal>>, onAddGoalClick: () -> Unit) {
-    val goals by goalsFlow.collectAsState(initial = emptyList())
-
+fun GoalListScreen(
+    goals: List<Goal>,
+    onIncrement: (Goal) -> Unit,
+    onDelete: (Goal) -> Unit,
+    onAddGoalClick: () -> Unit
+) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = onAddGoalClick) {
@@ -22,14 +29,21 @@ fun GoalListScreen(goalsFlow: Flow<List<Goal>>, onAddGoalClick: () -> Unit) {
             }
         }
     ) { padding ->
-        Column(modifier = Modifier
-            .padding(padding)
-            .padding(16.dp)) {
-            Text("Deine Ziele", style = MaterialTheme.typography.titleLarge)
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .padding(16.dp)
+        ) {
+            Text("Deine Ziele", style = MaterialTheme.typography.headlineMedium)
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             LazyColumn {
-                items(goals) { goal ->
-                    GoalItem(goal)
+                items(goals, key = { it.id }) { goal ->
+                    GoalItem(
+                        goal = goal,
+                        onIncrement = { onIncrement(goal) }
+                    )
                 }
             }
         }

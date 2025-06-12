@@ -27,4 +27,17 @@ class GoalViewModel(application: Application) : AndroidViewModel(application) {
             dao.insertGoal(Goal(title = title, target = target))
         }
     }
+
+    fun incrementGoal(goal: Goal) {
+        viewModelScope.launch {
+            val updated = goal.copy(progress = goal.progress + 1)
+            dao.updateGoal(updated)
+        }
+    }
+
+    fun deleteGoal(goal: Goal) {
+        viewModelScope.launch {
+            dao.deleteGoal(goal)
+        }
+    }
 }
