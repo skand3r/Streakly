@@ -15,18 +15,24 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.streakly.data.Goal
+import com.example.streakly.viewmodel.GoalViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GoalItem(
     goal: Goal,
-    onIncrement: () -> Unit
+    onIncrement: () -> Unit,
+    onClick: () -> Unit
 ) {
     Card(
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 6.dp),
@@ -37,8 +43,11 @@ fun GoalItem(
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            val goalViewModel: GoalViewModel = viewModel()
+            val todayProgress by goalViewModel.getTodayProgress(goal).collectAsState(initial = 0)
+
             LinearProgressIndicator(
-                progress = { (goal.progress.toFloat() / goal.target.toFloat()).coerceIn(0f, 1f) },
+                progress = { (todayProgress.toFloat() / goal.target.toFloat()).coerceIn(0f, 1f) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(8.dp),
@@ -52,7 +61,7 @@ fun GoalItem(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("${goal.progress} / ${goal.target}")
+                Text("$todayProgress / ${goal.target}")
 
                 Button(
                     onClick = onIncrement,
@@ -63,4 +72,8 @@ fun GoalItem(
             }
         }
     }
+}
+
+fun getProgress () {
+
 }

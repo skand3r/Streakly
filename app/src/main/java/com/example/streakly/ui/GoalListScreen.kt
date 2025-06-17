@@ -20,6 +20,7 @@ fun GoalListScreen(
     goals: List<Goal>,
     onIncrement: (Goal) -> Unit,
     onDelete: (Goal) -> Unit,
+    onClick: (Goal) -> Unit,
     onAddGoalClick: () -> Unit
 ) {
     Scaffold(
@@ -42,7 +43,8 @@ fun GoalListScreen(
                 items(goals, key = { it.id }) { goal ->
                     GoalItem(
                         goal = goal,
-                        onIncrement = { onIncrement(goal) }
+                        onIncrement = { onIncrement(goal) },
+                        onClick = { onClick(goal) }
                     )
                 }
             }

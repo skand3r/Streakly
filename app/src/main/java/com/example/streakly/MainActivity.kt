@@ -11,6 +11,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.streakly.ui.GoalListScreen
 import com.example.streakly.viewmodel.GoalViewModel
@@ -28,14 +29,21 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val viewModel: GoalViewModel = viewModel()
                     val goals by viewModel.goals.collectAsState()
+                    val context = LocalContext.current
 
                     GoalListScreen(
                         goals = goals,
-                        onIncrement = { viewModel.incrementGoal(it) },
+                        onIncrement = { viewModel.addProgressToday(it) },
                         onDelete = { viewModel.deleteGoal(it) },
                         onAddGoalClick = {
                             startActivity(Intent(this, AddGoalActivity::class.java))
+                        },
+                        onClick = {
+                            val intent = Intent(context, GoalDetailActivity::class.java)
+                            intent.putExtra("goalId", it.id)
+                            context.startActivity(intent)
                         }
+
                     )
                 }
             }
