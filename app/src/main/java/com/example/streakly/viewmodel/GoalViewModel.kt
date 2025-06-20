@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -52,6 +53,14 @@ class GoalViewModel(application: Application) : AndroidViewModel(application) {
     fun getTotalProgress(goal: Goal): Flow<Int> = flow {
         val total = progressDao.getTotalProgress(goal.id) ?: 0
         emit(total)
+    }
+
+    fun getWeeklyProgress(goal: Goal): Flow<List<Int>> {
+        val flows = (6 downTo 0).map { offset ->
+            val date = LocalDate.now().minusDays(offset.toLong()).toString()
+            progressDao.getProgressByDateFlow(goal.id, date).map { it?.amount ?: 0 }
+        }
+        return combine(flows) { it.toList() }
     }
 
     fun addProgressToday(goal: Goal, amount: Int = 1) {
