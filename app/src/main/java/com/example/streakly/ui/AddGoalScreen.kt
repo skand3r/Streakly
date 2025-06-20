@@ -30,7 +30,7 @@ fun AddGoalScreen(onSave: (String, Int) -> Unit) {
             .padding(24.dp)
     ) {
         Text(
-            text = "Neues Ziel",
+            text = "New Goal",
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.primary
         )
@@ -40,7 +40,7 @@ fun AddGoalScreen(onSave: (String, Int) -> Unit) {
         OutlinedTextField(
             value = title,
             onValueChange = { title = it },
-            label = { Text("Titel (z. B. Liegestütze)") },
+            label = { Text("Title (e.g. Push Ups)") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             shape = RoundedCornerShape(12.dp)
@@ -49,7 +49,7 @@ fun AddGoalScreen(onSave: (String, Int) -> Unit) {
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "Zielwert",
+            text = "Target Value",
             style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.onBackground
         )
@@ -73,7 +73,7 @@ fun AddGoalScreen(onSave: (String, Int) -> Unit) {
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp)
         ) {
-            Text("Ziel speichern")
+            Text("Save")
         }
     }
 }

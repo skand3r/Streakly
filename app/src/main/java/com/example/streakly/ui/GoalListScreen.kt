@@ -35,7 +35,7 @@ fun GoalListScreen(
                 .padding(padding)
                 .padding(16.dp)
         ) {
-            Text("Deine Ziele", style = MaterialTheme.typography.headlineMedium)
+            Text("Your Goals", style = MaterialTheme.typography.headlineMedium)
 
             Spacer(modifier = Modifier.height(16.dp))
 

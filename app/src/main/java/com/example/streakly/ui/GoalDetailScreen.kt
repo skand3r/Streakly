@@ -57,7 +57,7 @@ fun GoalDetailScreen(
                 onClick = onIncrement,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Fortschritt +1")
+                Text("+1")
             }
 
             OutlinedButton(
@@ -65,7 +65,7 @@ fun GoalDetailScreen(
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)
             ) {
-                Text("Ziel löschen")
+                Text("Delete Goal")
             }
 
             Spacer(modifier = Modifier.weight(1f))
