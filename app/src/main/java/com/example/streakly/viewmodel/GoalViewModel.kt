@@ -25,9 +25,12 @@ class GoalViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         viewModelScope.launch {
-            dao.getAllGoals().observeForever {
-                _goals.value = it
+            if (dao.getDefaultGoal() == null) {
+                dao.insertGoal(
+                    Goal(title = "Daily Steps", target = 10000, isDefault = true)
+                )
             }
+            dao.getAllGoals().observeForever { _goals.value = it }
         }
     }
 
@@ -38,9 +41,8 @@ class GoalViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun deleteGoal(goal: Goal) {
-        viewModelScope.launch {
-            dao.deleteGoal(goal)
-        }
+        if (goal.isDefault) return
+        viewModelScope.launch { dao.deleteGoal(goal) }
     }
 
     fun getTodayProgress(goal: Goal): Flow<Int> {

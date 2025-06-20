@@ -9,6 +9,9 @@ interface GoalDao {
     @Query("SELECT * FROM Goal")
     fun getAllGoals(): LiveData<List<Goal>>
 
+    @Query("SELECT * FROM Goal WHERE isDefault = 1 LIMIT 1")
+    suspend fun getDefaultGoal(): Goal?
+
     @Insert
     suspend fun insertGoal(goal: Goal)
 

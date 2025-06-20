@@ -60,12 +60,14 @@ fun GoalDetailScreen(
                 Text("+1")
             }
 
-            OutlinedButton(
-                onClick = onDelete,
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)
-            ) {
-                Text("Delete Goal")
+            if (!goal.isDefault) {
+                OutlinedButton(
+                    onClick = onDelete,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                ) {
+                    Text("Delete Goal")
+                }
             }
 
             Spacer(modifier = Modifier.weight(1f))
