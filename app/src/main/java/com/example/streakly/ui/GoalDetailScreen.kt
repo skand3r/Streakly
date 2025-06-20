@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.streakly.data.Goal
 import com.example.streakly.viewmodel.GoalViewModel
+import com.example.streakly.ui.WeeklyProgressChart
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,6 +24,7 @@ fun GoalDetailScreen(
 ) {
     val goalViewModel: GoalViewModel = viewModel()
     val todayProgress by goalViewModel.getTodayProgress(goal).collectAsState(initial = 0)
+    val weeklyProgress by goalViewModel.getWeeklyProgress(goal).collectAsState(initial = List(7) { 0 })
 
     Scaffold(
         topBar = {
@@ -64,6 +66,14 @@ fun GoalDetailScreen(
             ) {
                 Text("Ziel löschen")
             }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            WeeklyProgressChart(
+                progress = weeklyProgress,
+                target = goal.target,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
