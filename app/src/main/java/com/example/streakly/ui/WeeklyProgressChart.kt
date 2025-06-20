@@ -35,8 +35,7 @@ fun WeeklyProgressChart(
     Column(modifier) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(maxBarHeight),
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Bottom
         ) {

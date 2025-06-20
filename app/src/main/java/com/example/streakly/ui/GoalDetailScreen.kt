@@ -27,7 +27,6 @@ fun GoalDetailScreen(
     val todayProgress by goalViewModel.getTodayProgress(goal).collectAsState(initial = 0)
     val weeklyProgress by goalViewModel.getWeeklyProgress(goal).collectAsState(initial = List(7) { 0 })
 
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -54,12 +53,6 @@ fun GoalDetailScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            WeeklyProgressChart(
-                progress = weeklyProgress,
-                target = goal.target,
-                modifier = Modifier.fillMaxWidth()
-            )
-
             Button(
                 onClick = onIncrement,
                 modifier = Modifier.fillMaxWidth()
@@ -74,6 +67,14 @@ fun GoalDetailScreen(
             ) {
                 Text("Ziel löschen")
             }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            WeeklyProgressChart(
+                progress = weeklyProgress,
+                target = goal.target,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
