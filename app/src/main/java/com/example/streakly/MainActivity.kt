@@ -1,6 +1,9 @@
 package com.example.streakly
 
+import android.Manifest
 import android.content.Intent
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,10 +18,29 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.streakly.ui.GoalListScreen
 import com.example.streakly.viewmodel.GoalViewModel
+import com.example.streakly.StepTrackerService
 
 class MainActivity : ComponentActivity() {
+    private val requestPermissionCode = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Start step tracking service so steps are recorded even when the app is
+        // not in the foreground. Request the physical activity permission first
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q &&
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACTIVITY_RECOGNITION
+            ) != android.content.pm.PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
+                requestPermissionCode
+            )
+        } else {
+            startTrackerService()
+        }
         setContent {
             MaterialTheme(
                 colorScheme = darkColorScheme()
@@ -47,6 +69,31 @@ class MainActivity : ComponentActivity() {
                     )
                 }
             }
+        }
+    }
+
+    private fun startTrackerService() {
+        try {
+            ContextCompat.startForegroundService(
+                this,
+                Intent(this, StepTrackerService::class.java)
+            )
+        } catch (e: SecurityException) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == requestPermissionCode &&
+            grantResults.isNotEmpty() &&
+            grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED
+        ) {
+            startTrackerService()
         }
     }
 }

@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <uses-feature android:name="android.hardware.sensor.stepcounter" android:required="false" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -25,6 +30,10 @@
         </activity>
         <activity android:name=".AddGoalActivity" />
         <activity android:name=".GoalDetailActivity" />
+        <service
+            android:name=".StepTrackerService"
+            android:exported="false"
+            android:foregroundServiceType="health" />
     </application>
 
 </manifest>

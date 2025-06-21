@@ -3,6 +3,7 @@ package com.example.streakly.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.streakly.StepTrackerService
 import com.example.streakly.data.Goal
 import com.example.streakly.data.GoalDatabase
 import com.example.streakly.data.GoalProgress
@@ -12,6 +13,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -32,6 +35,19 @@ class GoalViewModel(application: Application) : AndroidViewModel(application) {
             }
             dao.getAllGoals().observeForever { _goals.value = it }
         }
+
+        // Listen for step updates from the tracker and store them for the
+        // default goal
+        StepTrackerService.steps()
+            .onEach { count ->
+                viewModelScope.launch {
+                    val defaultGoal = dao.getDefaultGoal()
+                    if (defaultGoal != null) {
+                        addProgressToday(defaultGoal, count)
+                    }
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     fun addGoal(title: String, target: Int) {
