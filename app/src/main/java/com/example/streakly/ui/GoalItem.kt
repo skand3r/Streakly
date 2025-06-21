@@ -20,6 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.streakly.data.Goal
@@ -54,13 +55,14 @@ fun GoalItem(
 
             val goalViewModel: GoalViewModel = viewModel()
             val todayProgress by goalViewModel.getTodayProgress(goal).collectAsState(initial = 0)
+            val isComplete = todayProgress >= goal.target
 
             LinearProgressIndicator(
                 progress = { (todayProgress.toFloat() / goal.target.toFloat()).coerceIn(0f, 1f) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(8.dp),
-                color = MaterialTheme.colorScheme.primary,
+                color = if (isComplete) Color(0xFF4CAF50) else MaterialTheme.colorScheme.primary,
             )
 
             Spacer(modifier = Modifier.height(8.dp))
