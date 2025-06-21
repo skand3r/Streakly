@@ -33,7 +33,7 @@ fun GoalDetailScreen(
                 title = { Text(goal.title) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Zurück")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 }
             )
@@ -53,11 +53,13 @@ fun GoalDetailScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            Button(
-                onClick = onIncrement,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("+1")
+            if (!goal.isDefault) {
+                Button(
+                    onClick = onIncrement,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("+1")
+                }
             }
 
             if (!goal.isDefault) {

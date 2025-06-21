@@ -72,11 +72,13 @@ fun GoalItem(
             ) {
                 Text("$todayProgress / ${goal.target}")
 
-                Button(
-                    onClick = onIncrement,
-                    shape = RoundedCornerShape(8.dp)
-                ) {
-                    Text("+1")
+                if (!goal.isDefault) {
+                    Button(
+                        onClick = onIncrement,
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text("+1")
+                    }
                 }
             }
         }
