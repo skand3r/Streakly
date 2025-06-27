@@ -86,7 +86,3 @@ fun GoalItem(
         }
     }
 }
-
-fun getProgress () {
-
-}

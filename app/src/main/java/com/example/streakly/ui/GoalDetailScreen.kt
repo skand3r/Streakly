@@ -9,8 +9,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import android.content.Intent
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.streakly.CompareStepsActivity
 import com.example.streakly.data.Goal
 import com.example.streakly.viewmodel.GoalViewModel
 import com.example.streakly.ui.WeeklyProgressChart
@@ -55,6 +58,18 @@ fun GoalDetailScreen(
                 modifier = Modifier.fillMaxWidth(),
                 color = if (isComplete) Color(0xFF4CAF50) else MaterialTheme.colorScheme.primary,
             )
+
+            if (goal.isDefault) {
+                val context = LocalContext.current
+                Button(
+                    onClick = {
+                        context.startActivity(Intent(context, CompareStepsActivity::class.java))
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Compare with Friend")
+                }
+            }
 
             if (!goal.isDefault) {
                 Button(
