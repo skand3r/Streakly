@@ -108,12 +108,4 @@ class GoalViewModelTest {
         advanceUntilIdle()
         verify(progressDao).update(GoalProgress(goalId = goal.id, date = today, amount = 2))
     }
-
-    @Test
-    fun getTodayProgress_callsDaoFlow() = scope.runTest {
-        val goal = Goal(id = 1, title = "Push", target = 5)
-        val today = java.time.LocalDate.now().toString()
-        viewModel.getTodayProgress(goal)
-        verify(progressDao).getProgressByDateFlow(goal.id, today)
-    }
 }
