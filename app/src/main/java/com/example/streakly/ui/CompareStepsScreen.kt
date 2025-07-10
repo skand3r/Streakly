@@ -4,7 +4,6 @@ import android.Manifest
 import android.bluetooth.BluetoothDevice
 import android.util.Log
 import androidx.annotation.RequiresPermission
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,26 +27,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import com.example.streakly.BluetoothService
+import com.example.streakly.ShareStepsManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
 fun CompareStepsScreen(
     mySteps: Int,
-    bluetoothService: BluetoothService,
+    shareStepsManager: ShareStepsManager,
     onBack: () -> Unit
 ) {
     val compareResult = remember { mutableStateOf<String?>(null) }
-    bluetoothService.startServer()
-    val context = LocalContext.current
 
     LaunchedEffect(mySteps) {
-        bluetoothService.startReceivingSteps { otherSteps ->
+        shareStepsManager.addOnReceiveListener { otherSteps ->
             val diff = mySteps - otherSteps
             Log.d("Steps", "mySteps: $mySteps, other: $otherSteps, diff: $diff")
             compareResult.value = if (diff > 0) {
@@ -60,7 +56,7 @@ fun CompareStepsScreen(
         }
     }
 
-    val pairedDevices = bluetoothService.getPairedDevices()
+    val pairedDevices = shareStepsManager.getPairedDevices()
 
     Scaffold(
         topBar = {
@@ -84,15 +80,7 @@ fun CompareStepsScreen(
             DeviceSelectionDropdown(
                 pairedDevices = pairedDevices,
                 onDeviceSelected = { device ->
-                    //stop the server and connect to the server of the other device
-                    bluetoothService.stopServer()
-                    bluetoothService.connectToDevice(device)
-
-                    //send the steps
-                    bluetoothService.sendSteps(mySteps)
-
-                    //start the server again, to receive steps
-                    bluetoothService.startServer()
+                    shareStepsManager.sendSteps(mySteps, device)
                 }
             )
             compareResult.value?.let {

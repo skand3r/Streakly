@@ -63,7 +63,7 @@ class StreaklyBluetoothService(
                 connectedSocket?.inputStream?.use { input ->
                     try {
                         val data = input.read().toInt()
-                        Log.d("Bluetooth", "Received data: $data")
+                        Log.d("Bluetooth", "Received data: $data, $dataCallback")
                         dataCallback(data)
                     } catch (e: IOException) {
                         Log.w("Bluetooth", "Tried to receive data, but socket was closed")

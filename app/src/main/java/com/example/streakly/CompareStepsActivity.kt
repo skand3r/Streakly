@@ -52,6 +52,8 @@ class CompareStepsActivity : ComponentActivity() {
         // Request Bluetooth permissions
         requestBluetoothPermissions()
 
+        val shareStepsManager: ShareStepsManager = StreaklyShareStepsManager(bluetoothService)
+
         setContent {
             MaterialTheme(colorScheme = darkColorScheme()) {
                 Surface(
@@ -68,7 +70,7 @@ class CompareStepsActivity : ComponentActivity() {
                     }
                     CompareStepsScreen(
                         mySteps = todaySteps,
-                        bluetoothService = bluetoothService,
+                        shareStepsManager = shareStepsManager,
                         onBack = { finish() }
                     )
                 }
