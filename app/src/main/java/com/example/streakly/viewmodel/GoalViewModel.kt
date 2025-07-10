@@ -3,10 +3,13 @@ package com.example.streakly.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.streakly.StepTracker
 import com.example.streakly.StreaklyStepTrackerService
 import com.example.streakly.data.Goal
+import com.example.streakly.data.GoalDao
 import com.example.streakly.data.GoalDatabase
 import com.example.streakly.data.GoalProgress
+import com.example.streakly.data.GoalProgressDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,10 +21,14 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-class GoalViewModel(application: Application) : AndroidViewModel(application) {
-    private val database = GoalDatabase.getDatabase(application)
-    private val dao = database.goalDao()
-    private val progressDao = database.goalProgressDao()
+class GoalViewModel(
+    application: Application,
+    private val dao: GoalDao = GoalDatabase.getDatabase(application).goalDao(),
+    private val progressDao: GoalProgressDao =
+        GoalDatabase.getDatabase(application).goalProgressDao(),
+    stepTracker: StepTracker = StreaklyStepTrackerService(),
+) : AndroidViewModel(application) {
+    private val tracker = stepTracker
 
     private val _goals = MutableStateFlow<List<Goal>>(emptyList())
     val goals = _goals.asStateFlow()
@@ -38,7 +45,7 @@ class GoalViewModel(application: Application) : AndroidViewModel(application) {
 
         // Listen for step updates from the tracker and store them for the
         // default goal
-        StreaklyStepTrackerService.steps()
+        tracker.steps()
             .onEach { count ->
                 viewModelScope.launch {
                     val defaultGoal = dao.getDefaultGoal()
