@@ -1,7 +1,6 @@
 package com.example.streakly
 
 import android.bluetooth.BluetoothDevice
-import android.util.Log
 
 
 class StreaklyShareStepsManager (private val bluetoothService: BluetoothService) : ShareStepsManager{

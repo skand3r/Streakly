@@ -115,7 +115,7 @@ class StreaklyBluetoothService(
 
     private inner class AcceptThread : Thread() {
         private val serverSocket: BluetoothServerSocket? by lazy {
-            bluetoothAdapter?.listenUsingInsecureRfcommWithServiceRecord("AppName", uuid)
+            bluetoothAdapter?.listenUsingInsecureRfcommWithServiceRecord("Streakly", uuid)
         }
 
         override fun run() {

@@ -37,13 +37,7 @@ class CompareStepsActivity : ComponentActivity() {
         StreaklyBluetoothService(applicationContext)
     }
 
-    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-        if (isGranted) {
-            // Permission is granted. Continue the action or workflow in your app.
-        } else {
-            // Explain to the user that the feature is unavailable because the features require a permission that the user has denied.
-        }
-    }
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){}
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     override fun onCreate(savedInstanceState: Bundle?) {

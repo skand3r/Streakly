@@ -18,7 +18,6 @@ fun NumberPicker(
 ) {
     var inputText by remember { mutableStateOf(value.toString()) }
 
-    // Wenn Textfeld geändert wird, versuche Zahl zu übernehmen
     LaunchedEffect(inputText) {
         val num = inputText.toIntOrNull()
         if (num != null && num in range) {
