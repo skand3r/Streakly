@@ -41,7 +41,7 @@ class AddGoalScreenTest {
 
         // Enter whitespace + text
         composeTestRule
-            .onNode(hasSetTextAction())
+            .onNodeWithText("Title (e.g. Push Ups)")
             .performTextInput("   Sit-ups   ")
 
         // Click Save
