@@ -3,7 +3,7 @@ package com.example.streakly.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.streakly.StepTrackerService
+import com.example.streakly.StreaklyStepTrackerService
 import com.example.streakly.data.Goal
 import com.example.streakly.data.GoalDatabase
 import com.example.streakly.data.GoalProgress
@@ -38,7 +38,7 @@ class GoalViewModel(application: Application) : AndroidViewModel(application) {
 
         // Listen for step updates from the tracker and store them for the
         // default goal
-        StepTrackerService.steps()
+        StreaklyStepTrackerService.steps()
             .onEach { count ->
                 viewModelScope.launch {
                     val defaultGoal = dao.getDefaultGoal()

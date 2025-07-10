@@ -38,7 +38,7 @@
         <activity android:name=".GoalDetailActivity" />
         <activity android:name=".CompareStepsActivity" />
         <service
-            android:name=".StepTrackerService"
+            android:name=".StreaklyStepTrackerService"
             android:exported="false"
             android:foregroundServiceType="health" />
     </application>

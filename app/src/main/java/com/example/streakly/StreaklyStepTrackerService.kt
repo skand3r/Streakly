@@ -19,7 +19,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
-class StepTrackerService : Service(), SensorEventListener {
+class StreaklyStepTrackerService : Service(), SensorEventListener, StepTracker {
+
 
     private lateinit var sensorManager: SensorManager
     private var initialCount: Float? = null
@@ -51,6 +52,8 @@ class StepTrackerService : Service(), SensorEventListener {
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
+
+    override fun steps() = StreaklyStepTrackerService.steps()
 
     override fun onSensorChanged(event: SensorEvent) {
         if (initialCount == null) {

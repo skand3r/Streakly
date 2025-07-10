@@ -18,7 +18,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.streakly.ui.GoalListScreen
 import com.example.streakly.viewmodel.GoalViewModel
-import com.example.streakly.StepTrackerService
 
 class MainActivity : ComponentActivity() {
     private val requestPermissionCode = 0
@@ -76,7 +75,7 @@ class MainActivity : ComponentActivity() {
         try {
             ContextCompat.startForegroundService(
                 this,
-                Intent(this, StepTrackerService::class.java)
+                Intent(this, StreaklyStepTrackerService::class.java)
             )
         } catch (e: SecurityException) {
             e.printStackTrace()
