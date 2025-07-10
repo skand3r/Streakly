@@ -21,19 +21,32 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-class GoalViewModel(
-    application: Application,
-    private val dao: GoalDao = GoalDatabase.getDatabase(application).goalDao(),
-    private val progressDao: GoalProgressDao =
-        GoalDatabase.getDatabase(application).goalProgressDao(),
-    stepTracker: StepTracker = StreaklyStepTrackerService(),
-) : AndroidViewModel(application) {
+class GoalViewModel(application: Application) : AndroidViewModel(application) {
+    private var dao: GoalDao = GoalDatabase.getDatabase(application).goalDao()
+    private var progressDao: GoalProgressDao = GoalDatabase.getDatabase(application).goalProgressDao()
+    private var stepTracker: StepTracker = StreaklyStepTrackerService()
     private val tracker = stepTracker
 
     private val _goals = MutableStateFlow<List<Goal>>(emptyList())
     val goals = _goals.asStateFlow()
 
+    constructor(
+        application: Application,
+        dao: GoalDao,
+        progressDao: GoalProgressDao,
+        stepTracker: StepTracker
+    ) :this(application) {
+        initialize(application, dao, progressDao, stepTracker)
+    }
+
+    private fun initialize(application: Application, dao: GoalDao?, progressDao: GoalProgressDao?, stepTracker: StepTracker?) {
+        this.dao = dao ?: GoalDatabase.getDatabase(application).goalDao()
+        this.progressDao = progressDao ?: GoalDatabase.getDatabase(application).goalProgressDao()
+        this.stepTracker = stepTracker ?: StreaklyStepTrackerService()
+    }
+
     init {
+        initialize(application, null, null, null)
         viewModelScope.launch {
             if (dao.getDefaultGoal() == null) {
                 dao.insertGoal(

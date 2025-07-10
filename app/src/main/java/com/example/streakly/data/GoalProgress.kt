@@ -18,6 +18,6 @@ import androidx.room.PrimaryKey
 data class GoalProgress(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val goalId: Int,
-    val date: String, // like "2025-06-17"
+    val date: String,
     val amount: Int = 0
 )
